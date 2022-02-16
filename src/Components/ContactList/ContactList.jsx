@@ -1,37 +1,33 @@
-import PropTypes from 'prop-types';
 import { BtnDelete, List, ListItem } from '../Styled/Styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from '../../Redux/contactActions';
+import { getContacts } from '../../Redux/selectors';
 
-function ContactList ({ contacts, onDelete })  {
-   
-        return (
-            <List>
-                {contacts.map(contact => (
-                    <ListItem key={contact.id}>
-                        <p>
-                            {contact.name}: <span>{contact.number}</span>
-                        </p>
-                        <BtnDelete
-                            type="button"
-                            onClick={() => {
-                                onDelete(contact.id);
-                            }}
-                        >
-                            Delete
-                        </BtnDelete>
-                    </ListItem>
-                ))}
-            </List>
-        );
-    }
+function ContactList() {
+    const dispatch = useDispatch();
+    const onDelete = id => dispatch(deleteContact(id));
 
- ContactList.propTypes = {
-     contacts: PropTypes.arrayOf(
-         PropTypes.shape({
-             id: PropTypes.string.isRequired,
-             name: PropTypes.string.isRequired,
-             number: PropTypes.string.isRequired,
-         }),
-     ).isRequired,
-};
- 
+    const contacts = useSelector(getContacts);
+
+    return (
+        <List>
+            {contacts.map(contact => (
+                <ListItem key={contact.id}>
+                    <p>
+                        {contact.name}: <span>{contact.number}</span>
+                    </p>
+                    <BtnDelete
+                        type="button"
+                        onClick={() => {
+                            onDelete(contact.id);
+                        }}
+                    >
+                        Delete
+                    </BtnDelete>
+                </ListItem>
+            ))}
+        </List>
+    );
+}
+
 export default ContactList;

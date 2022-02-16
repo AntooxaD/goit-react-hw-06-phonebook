@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import { Form, Wrapper, SpanName, Input, Button } from '../Styled/Styled';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { addContact } from '../../Redux/contactActions';
 
-function ContactForm({ onSubmit }) {
+function ContactForm() {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
 
+    const nameId = nanoid();
+    const dispatch = useDispatch();
+
     const handleSubmit = e => {
         e.preventDefault();
-        onSubmit({ name, number });
+        dispatch(addContact({ name, number }));
         reset();
+        return;
     };
 
     function reset() {
@@ -41,6 +47,7 @@ function ContactForm({ onSubmit }) {
                     pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
                     title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
                     required
+                    id={nameId}
                     value={name}
                     onChange={handleChange}
                 />
@@ -61,7 +68,4 @@ function ContactForm({ onSubmit }) {
         </Form>
     );
 }
-ContactForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-};
 export default ContactForm;
